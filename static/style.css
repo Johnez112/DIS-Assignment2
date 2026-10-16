@@ -1,0 +1,82 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f5f6f8;
+  color: #222;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #2f4858;
+  color: #fff;
+}
+header h1 { margin: 0; font-size: 1.3rem; }
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+nav a {
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #2f4858;
+  border: 1px solid #c9d3da;
+}
+nav a.active { background: #2f4858; color: #fff; }
+
+main { padding: 16px 24px 40px; }
+h2 small, nav small { font-weight: normal; color: #888; }
+nav a.active small { color: #ccd; }
+
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.92rem;
+}
+th, td { padding: 8px 10px; border-bottom: 1px solid #e3e3e3; text-align: left; }
+th { background: #e9eef1; }
+tr.editing td { background: #fff6d6; }
+
+.actions { display: flex; gap: 6px; white-space: nowrap; }
+.actions form { margin: 0; }
+
+button, a.button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background: #33658a;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+button.danger { background: #b23a48; }
+button.secondary { background: #fff; color: #2f4858; }
+
+.search { margin-bottom: 12px; display: flex; gap: 8px; align-items: center; }
+.search input { padding: 6px 10px; width: 260px; }
+
+.record-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+}
+.record-form label { display: flex; flex-direction: column; font-size: 0.85rem; color: #555; }
+.record-form input { margin-top: 4px; padding: 6px 8px; font-size: 0.95rem; }
+.form-buttons { display: flex; gap: 12px; align-items: end; }

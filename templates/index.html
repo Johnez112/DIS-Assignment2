@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painting company app</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Painting company app</h1>
+    <form method="post" action="{{ url_for('reset') }}"
+          onsubmit="return confirm('Reset all databases to the original dummy data?');">
+      <button class="secondary">Reset dummy data</button>
+    </form>
+  </header>
+
+  <nav>
+    <span>Select database:</span>
+    {% for k, db in databases.items() %}
+      <a href="{{ url_for('view_db', key=k) }}" class="{{ 'active' if k == key }}">
+        {{ db.label }} <small>({{ db.file }})</small>
+      </a>
+    {% endfor %}
+  </nav>
+
+  <main>
+    <h2>{{ settings.label }} <small>– {{ rows|length }} records</small></h2>
+
+    <form class="search" method="get" action="{{ url_for('view_db', key=key) }}">
+      <input type="text" name="q" value="{{ search }}" placeholder="Search...">
+      <button>Search</button>
+      {% if search %}<a href="{{ url_for('view_db', key=key) }}">Clear</a>{% endif %}
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            {% for c in columns %}<th>{{ c }}</th>{% endfor %}
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr class="{{ 'editing' if edit_row and edit_row['id'] == row['id'] }}">
+              {% for c in columns %}<td>{{ row[c] if row[c] is not none else '' }}</td>{% endfor %}
+              <td class="actions">
+                <a class="button" href="{{ url_for('edit_row', key=key, row_id=row['id']) }}">Edit</a>
+                <form method="post" action="{{ url_for('delete_row', key=key, row_id=row['id']) }}"
+                      data-confirm="Delete record {{ row['id'] }}?"
+                      onsubmit="return confirm(this.dataset.confirm);">
+                  <button class="danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="{{ columns|length + 1 }}">No records found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if edit_row %}
+      <h3>Edit record #{{ edit_row['id'] }}</h3>
+      <form class="record-form" method="post" action="{{ url_for('edit_row', key=key, row_id=edit_row['id']) }}">
+        {% for c in editable %}
+          <label>{{ c }}
+            <input type="text" name="{{ c }}" value="{{ edit_row[c] if edit_row[c] is not none else '' }}">
+          </label>
+        {% endfor %}
+        <div class="form-buttons">
+          <button>Save changes</button>
+          <a href="{{ url_for('view_db', key=key) }}">Cancel</a>
+        </div>
+      </form>
+    {% else %}
+      <h3>Add new record</h3>
+      <form class="record-form" method="post" action="{{ url_for('add_row', key=key) }}">
+        {% for c in editable %}
+          <label>{{ c }}<input type="text" name="{{ c }}"></label>
+        {% endfor %}
+        <div class="form-buttons"><button>Add</button></div>
+      </form>
+    {% endif %}
+  </main>
+</body>
+</html>
